@@ -4,48 +4,50 @@ import type {CapacitorPoolakeyPlugin} from './definitions';
 
 export class CapacitorPoolakeyWeb extends WebPlugin implements CapacitorPoolakeyPlugin {
 
+    message = "Not available in web."
+
     async connectPayment(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async disconnectPayment(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async purchaseProduct(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async subscribeProduct(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async consumeProduct(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async getPurchasedProducts(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async getSubscribedProducts(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async queryPurchaseProduct(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async querySubscribeProduct(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async getInAppSkuDetails(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
     async getSubscriptionSkuDetails(): Promise<void> {
-        console.log("Not available in web.")
+        throw new Error(this.message)
     }
 
 }
