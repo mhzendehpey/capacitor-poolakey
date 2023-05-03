@@ -6,6 +6,8 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+import java.util.Objects;
+
 @CapacitorPlugin(name = "CapacitorPoolakey")
 public class CapacitorPoolakeyPlugin extends Plugin {
     private final CapacitorPoolakey implementation = new CapacitorPoolakey();
@@ -27,6 +29,26 @@ public class CapacitorPoolakeyPlugin extends Plugin {
     @PluginMethod
     public final void disconnectPayment(PluginCall call) {
         this.implementation.disconnectPayment();
+    }
+
+    @PluginMethod
+    public final void purchaseProduct(PluginCall call) {
+        this.implementation.purchaseProduct(
+                getActivity(),
+                Objects.requireNonNull(call.getString("productId")),
+                call.getString("payload"),
+                call.getString("dynamicPriceToken")
+        );
+    }
+
+    @PluginMethod
+    public final void subscribeProduct(PluginCall call) {
+        this.implementation.subscribeProduct(
+                getActivity(),
+                Objects.requireNonNull(call.getString("productId")),
+                call.getString("payload"),
+                call.getString("dynamicPriceToken")
+        );
     }
 
 }

@@ -1,5 +1,6 @@
 package com.mxz.capacitor.plugin.poolakey
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 
@@ -8,8 +9,6 @@ import ir.cafebazaar.poolakey.ConnectionState
 import ir.cafebazaar.poolakey.Payment
 import ir.cafebazaar.poolakey.config.PaymentConfiguration
 import ir.cafebazaar.poolakey.config.SecurityCheck
-import ir.cafebazaar.poolakey.exception.DisconnectException
-import ir.cafebazaar.poolakey.request.PurchaseRequest
 
 const val LOG_TAG = "CAP_POOLAKEY"
 
@@ -37,7 +36,7 @@ class CapacitorPoolakey {
         Log.d(LOG_TAG, "Connection Succeed")
       }
       connectionFailed { throwable ->
-        throwable.message?.let { Log.d(LOG_TAG, "Connection Failed $it") }
+        throwable.message?.let { Log.d(LOG_TAG, "Connection Failed: $it") }
       }
       disconnected {
         Log.d(LOG_TAG, "Connection Disconnected")
@@ -47,5 +46,61 @@ class CapacitorPoolakey {
 
   fun disconnectPayment() {
     paymentConnection?.disconnect()
+  }
+
+  private fun startActivity(
+    activity: Activity?,
+    command: PaymentActivity.Command,
+    productId: String,
+    payload: String?,
+    dynamicPriceToken: String?
+  ) {
+    if (paymentConnection?.getState() != ConnectionState.Connected) {
+      Log.d(LOG_TAG, "payment not connected")
+      return
+    }
+    if (activity == null) {
+      Log.d(LOG_TAG, "activity not found")
+      return
+    }
+
+    PaymentActivity.start(
+      activity,
+      command,
+      productId,
+      payment,
+      payload,
+      dynamicPriceToken
+    )
+  }
+
+  fun purchaseProduct(
+    activity: Activity?,
+    productId: String,
+    payload: String?,
+    dynamicPriceToken: String?
+  ) {
+    startActivity(
+      activity,
+      PaymentActivity.Command.Purchase,
+      productId,
+      payload,
+      dynamicPriceToken
+    )
+  }
+
+  fun subscribeProduct(
+    activity: Activity?,
+    productId: String,
+    payload: String?,
+    dynamicPriceToken: String?
+  ) {
+    startActivity(
+      activity,
+      PaymentActivity.Command.Subscribe,
+      productId,
+      payload,
+      dynamicPriceToken
+    )
   }
 }
