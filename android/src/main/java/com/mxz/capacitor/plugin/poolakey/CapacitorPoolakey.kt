@@ -14,190 +14,217 @@ import ir.cafebazaar.poolakey.config.SecurityCheck
 const val LOG_TAG = "CAP_POOLAKEY"
 
 class CapacitorPoolakey {
-  private var paymentConnection: Connection? = null
-  private lateinit var payment: Payment
+    private var paymentConnection: Connection? = null
+    private lateinit var payment: Payment
 
-  fun echo(value: String?): String? {
-    Log.i("Echo", value!!)
-    return value
-  }
-
-  fun connectPayment(context: Context, rsaPublicKey: String? = null) {
-    val securityCheck = if (rsaPublicKey == null) {
-      SecurityCheck.Disable
-    } else {
-      SecurityCheck.Enable(rsaPublicKey = rsaPublicKey)
-    }
-
-    val paymentConfig = PaymentConfiguration(localSecurityCheck = securityCheck)
-    val payment = Payment(context = context, config = paymentConfig)
-
-    paymentConnection = payment.connect {
-      connectionSucceed {
-        Log.d(LOG_TAG, "Connection Succeed")
-      }
-      connectionFailed { throwable ->
-        throwable.message?.let { Log.d(LOG_TAG, "Connection Failed: $it") }
-      }
-      disconnected {
-        Log.d(LOG_TAG, "Connection Disconnected")
-      }
-    }
-  }
-
-  fun disconnectPayment() {
-    paymentConnection?.disconnect()
-  }
-
-  private fun startActivity(
-    activity: Activity?,
-    command: PaymentActivity.Command,
-    productId: String,
-    payload: String?,
-    dynamicPriceToken: String?
-  ) {
-    if (paymentConnection?.getState() != ConnectionState.Connected) {
-      Log.d(LOG_TAG, "payment not connected")
-      return
-    }
-    if (activity == null) {
-      Log.d(LOG_TAG, "activity not found")
-      return
-    }
-
-    PaymentActivity.start(
-      activity,
-      command,
-      productId,
-      payment,
-      payload,
-      dynamicPriceToken
-    )
-  }
-
-  fun purchaseProduct(
-    activity: Activity?,
-    productId: String,
-    payload: String?,
-    dynamicPriceToken: String?
-  ) {
-    startActivity(
-      activity,
-      PaymentActivity.Command.Purchase,
-      productId,
-      payload,
-      dynamicPriceToken
-    )
-  }
-
-  fun subscribeProduct(
-    activity: Activity?,
-    productId: String,
-    payload: String?,
-    dynamicPriceToken: String?
-  ) {
-    startActivity(
-      activity,
-      PaymentActivity.Command.Subscribe,
-      productId,
-      payload,
-      dynamicPriceToken
-    )
-  }
-
-  fun consumePurchase(purchaseToken: String) {
-    payment.consumeProduct(purchaseToken) {
-      consumeSucceed {
-        Log.d(LOG_TAG, "consume succeed")
-      }
-      consumeFailed {
-        Log.d(LOG_TAG, "consume failed: ${it.message}")
-      }
-    }
-  }
-
-  fun getPurchasedProducts(call: PluginCall) {
-    payment.getPurchasedProducts {
-      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-      querySucceed {
-        val jsObject = JSObject(it.toJsonString())
-        call.resolve(jsObject)
-      }
-    }
-  }
-
-  fun getSubscribedProducts(call: PluginCall) {
-    payment.getSubscribedProducts {
-      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-      querySucceed {
-        val jsObject = JSObject(it.toJsonString())
-        call.resolve(jsObject)
-      }
-    }
-  }
-
-  fun queryPurchaseProduct(call: PluginCall) {
-    val productId = call.getString("productId")
-    payment.getPurchasedProducts {
-      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-      querySucceed { purchaseList ->
-        val product = purchaseList.firstOrNull {
-          it.productId == productId
-        }
-
-        if (product == null) {
-          call.reject("item not found", Exception("NotFoundException"))
+    fun connectPayment(call: PluginCall, context: Context) {
+        val rsaPublicKey = call.getString("rsaPublicKey")
+        val securityCheck = if (rsaPublicKey == null) {
+            SecurityCheck.Disable
         } else {
-          val jsObject = JSObject(product.originalJson)
-          call.resolve(jsObject)
-        }
-      }
-    }
-  }
-
-  fun querySubscribeProduct(call: PluginCall) {
-    val productId = call.getString("productId")
-    payment.getSubscribedProducts {
-      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-      querySucceed { purchaseList ->
-        val product = purchaseList.firstOrNull {
-          it.productId == productId
+            SecurityCheck.Enable(rsaPublicKey = rsaPublicKey)
         }
 
-        if (product == null) {
-          call.reject("item not found", Exception("NotFoundException"))
-        } else {
-          val jsObject = JSObject(product.originalJson)
-          call.resolve(jsObject)
+        val paymentConfig = PaymentConfiguration(localSecurityCheck = securityCheck)
+        val payment = Payment(context = context, config = paymentConfig)
+
+        paymentConnection = payment.connect {
+            connectionSucceed {
+                Log.d(LOG_TAG, "Connection Succeed")
+                call.resolve()
+            }
+            connectionFailed { throwable ->
+                Log.d(LOG_TAG, "Connection Failed: ${throwable.message}")
+                call.reject("Connection Failed", Exception(throwable))
+            }
+            disconnected {
+                Log.d(LOG_TAG, "Connection Disconnected")
+                call.reject("Connection Disconnected", Exception("Connection Disconnected"))
+            }
         }
-      }
     }
-  }
 
-  fun getInAppSkuDetails(call: PluginCall) {
-    val productIdsJson = call.getString("productIdsJson")!!
-    val productIds = parseProductIds(productIdsJson)
-
-    payment.getInAppSkuDetails(productIds) {
-      getSkuDetailsFailed { call.reject("get Sku details failed: ${it.message}", Exception(it)) }
-      getSkuDetailsSucceed {
-        val jsObject = JSObject(it.toJsonString())
-        call.resolve(jsObject)
-      }
+    fun disconnectPayment(call: PluginCall) {
+        paymentConnection?.disconnect()
+        call.resolve()
     }
-  }
 
-  fun getSubscriptionSkuDetails(call: PluginCall) {
-    val productIdsJson = call.getString("productIdsJson")!!
-    val productIds = parseProductIds(productIdsJson)
+    private fun startActivity(
+        call: PluginCall,
+        activity: Activity?,
+        command: PaymentActivity.Command,
+        productId: String,
+        payload: String?,
+        dynamicPriceToken: String?
+    ) {
+        if (paymentConnection?.getState() != ConnectionState.Connected) {
+            Log.d(LOG_TAG, "Payment is not connected")
+            call.reject(
+                "Payment is not connected",
+                IllegalStateException("Payment is not connected")
+            )
+            return
+        }
+        if (activity == null) {
+            Log.d(LOG_TAG, "Activity not found")
+            call.reject("Activity not found", IllegalStateException("Activity not found"))
+            return
+        }
 
-    payment.getSubscriptionSkuDetails(productIds) {
-      getSkuDetailsFailed { call.reject("get Sku details failed: ${it.message}", Exception(it)) }
-      getSkuDetailsSucceed {
-        val jsObject = JSObject(it.toJsonString())
-        call.resolve(jsObject)
-      }
+        PaymentActivity.start(
+            call,
+            activity,
+            command,
+            productId,
+            payment,
+            payload,
+            dynamicPriceToken
+        )
     }
-  }
+
+    fun purchaseProduct(
+        call: PluginCall,
+        activity: Activity?,
+    ) {
+        val productId = call.getString("productId")!!
+        val payload = call.getString("payload")
+        val dynamicPriceToken = call.getString("dynamicPriceToken")
+
+        startActivity(
+            call,
+            activity,
+            PaymentActivity.Command.Purchase,
+            productId,
+            payload,
+            dynamicPriceToken
+        )
+    }
+
+    fun subscribeProduct(
+        call: PluginCall,
+        activity: Activity?,
+    ) {
+        val productId = call.getString("productId")!!
+        val payload = call.getString("payload")
+        val dynamicPriceToken = call.getString("dynamicPriceToken")
+
+        startActivity(
+            call,
+            activity,
+            PaymentActivity.Command.Subscribe,
+            productId,
+            payload,
+            dynamicPriceToken
+        )
+    }
+
+    fun consumePurchase(call: PluginCall) {
+        val purchaseToken = call.getString("purchaseToken")!!
+
+        payment.consumeProduct(purchaseToken) {
+            consumeSucceed {
+                Log.d(LOG_TAG, "consume succeed")
+                call.resolve()
+            }
+            consumeFailed {
+                Log.d(LOG_TAG, "consume failed: ${it.message}")
+                call.reject("consume failed", Exception(it))
+            }
+        }
+    }
+
+    fun getPurchasedProducts(call: PluginCall) {
+        payment.getPurchasedProducts {
+            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+            querySucceed {
+                val jsObject = JSObject(it.toJsonString())
+                call.resolve(jsObject)
+            }
+        }
+    }
+
+    fun getSubscribedProducts(call: PluginCall) {
+        payment.getSubscribedProducts {
+            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+            querySucceed {
+                val jsObject = JSObject(it.toJsonString())
+                call.resolve(jsObject)
+            }
+        }
+    }
+
+    fun queryPurchaseProduct(call: PluginCall) {
+        val productId = call.getString("productId")
+        payment.getPurchasedProducts {
+            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+            querySucceed { purchaseList ->
+                val product = purchaseList.firstOrNull {
+                    it.productId == productId
+                }
+
+                if (product == null) {
+                    call.reject("item not found", Exception("NotFoundException"))
+                } else {
+                    val jsObject = JSObject(product.originalJson)
+                    call.resolve(jsObject)
+                }
+            }
+        }
+    }
+
+    fun querySubscribeProduct(call: PluginCall) {
+        val productId = call.getString("productId")
+        payment.getSubscribedProducts {
+            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+            querySucceed { purchaseList ->
+                val product = purchaseList.firstOrNull {
+                    it.productId == productId
+                }
+
+                if (product == null) {
+                    call.reject("item not found", Exception("NotFoundException"))
+                } else {
+                    val jsObject = JSObject(product.originalJson)
+                    call.resolve(jsObject)
+                }
+            }
+        }
+    }
+
+    fun getInAppSkuDetails(call: PluginCall) {
+        val productIdsJson = call.getString("productIdsJson")!!
+        val productIds = parseProductIds(productIdsJson)
+
+        payment.getInAppSkuDetails(productIds) {
+            getSkuDetailsFailed {
+                call.reject(
+                    "get Sku details failed: ${it.message}",
+                    Exception(it)
+                )
+            }
+            getSkuDetailsSucceed {
+                val jsObject = JSObject(it.toJsonString())
+                call.resolve(jsObject)
+            }
+        }
+    }
+
+    fun getSubscriptionSkuDetails(call: PluginCall) {
+        val productIdsJson = call.getString("productIdsJson")!!
+        val productIds = parseProductIds(productIdsJson)
+
+        payment.getSubscriptionSkuDetails(productIds) {
+            getSkuDetailsFailed {
+                call.reject(
+                    "get Sku details failed: ${it.message}",
+                    Exception(it)
+                )
+            }
+            getSkuDetailsSucceed {
+                val jsObject = JSObject(it.toJsonString())
+                call.resolve(jsObject)
+            }
+        }
+    }
 
 }

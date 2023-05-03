@@ -1,12 +1,8 @@
 import {WebPlugin} from '@capacitor/core';
 
-import type {CapacitorPoolakeyPlugin, SkuDetails, PurchaseInfo} from './definitions';
+import type {CapacitorPoolakeyPlugin} from './definitions';
 
 export class CapacitorPoolakeyWeb extends WebPlugin implements CapacitorPoolakeyPlugin {
-    async echo(options: { value: string }): Promise<{ value: string }> {
-        console.log('ECHO', options);
-        return options;
-    }
 
     async connectPayment(): Promise<void> {
         console.log("Not available in web.")
@@ -28,27 +24,27 @@ export class CapacitorPoolakeyWeb extends WebPlugin implements CapacitorPoolakey
         console.log("Not available in web.")
     }
 
-    async getPurchasedProducts(): Promise<PurchaseInfo[] | void> {
+    async getPurchasedProducts(): Promise<void> {
         console.log("Not available in web.")
     }
 
-    async getSubscribedProducts(): Promise<PurchaseInfo[] | void> {
+    async getSubscribedProducts(): Promise<void> {
         console.log("Not available in web.")
     }
 
-    async queryPurchaseProduct(): Promise<PurchaseInfo | void> {
+    async queryPurchaseProduct(): Promise<void> {
         console.log("Not available in web.")
     }
 
-    async querySubscribeProduct(): Promise<PurchaseInfo | void> {
+    async querySubscribeProduct(): Promise<void> {
         console.log("Not available in web.")
     }
 
-    async getInAppSkuDetails(): Promise<SkuDetails | void> {
+    async getInAppSkuDetails(): Promise<void> {
         console.log("Not available in web.")
     }
 
-    async getSubscriptionSkuDetails(): Promise<SkuDetails | void> {
+    async getSubscriptionSkuDetails(): Promise<void> {
         console.log("Not available in web.")
     }
 

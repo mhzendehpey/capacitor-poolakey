@@ -1,13 +1,11 @@
 export interface CapacitorPoolakeyPlugin {
-    echo(options: { value: string }): Promise<{ value: string }>;
-
     connectPayment(options: ConnectPaymentParams): Promise<void>;
 
     disconnectPayment(): Promise<void>;
 
-    purchaseProduct(options: PurchaseSubscribeProductParams): Promise<void>;
+    purchaseProduct(options: PurchaseSubscribeProductParams): Promise<PurchaseInfo | void>;
 
-    subscribeProduct(options: PurchaseSubscribeProductParams): Promise<void>;
+    subscribeProduct(options: PurchaseSubscribeProductParams): Promise<PurchaseInfo | void>;
 
     consumeProduct(options: ConsumeProductParams): Promise<void>;
 
@@ -51,10 +49,10 @@ export interface PurchaseInfo {
     purchaseToken: string,
     payload: string,
     packageName: string,
-    purchaseState: "PURCHASED" | "REFUNDED",
+    purchaseState: number
     purchaseTime: number,
     productId: string,
-    dataSignature: string
+    dataSignature: string,
 }
 
 export interface SkuDetails {

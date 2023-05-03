@@ -13,7 +13,6 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
 * [`connectPayment(...)`](#connectpayment)
 * [`disconnectPayment()`](#disconnectpayment)
 * [`purchaseProduct(...)`](#purchaseproduct)
@@ -31,21 +30,6 @@ npx cap sync
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### echo(...)
-
-```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
-```
-
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
-
---------------------
-
 
 ### connectPayment(...)
 
@@ -72,12 +56,14 @@ disconnectPayment() => Promise<void>
 ### purchaseProduct(...)
 
 ```typescript
-purchaseProduct(options: PurchaseSubscribeProductParams) => Promise<void>
+purchaseProduct(options: PurchaseSubscribeProductParams) => Promise<PurchaseInfo | void>
 ```
 
 | Param         | Type                                                                                      |
 | ------------- | ----------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasesubscribeproductparams">PurchaseSubscribeProductParams</a></code> |
+
+**Returns:** <code>Promise&lt;void | <a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
 
 --------------------
 
@@ -85,12 +71,14 @@ purchaseProduct(options: PurchaseSubscribeProductParams) => Promise<void>
 ### subscribeProduct(...)
 
 ```typescript
-subscribeProduct(options: PurchaseSubscribeProductParams) => Promise<void>
+subscribeProduct(options: PurchaseSubscribeProductParams) => Promise<PurchaseInfo | void>
 ```
 
 | Param         | Type                                                                                      |
 | ------------- | ----------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#purchasesubscribeproductparams">PurchaseSubscribeProductParams</a></code> |
+
+**Returns:** <code>Promise&lt;void | <a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
 
 --------------------
 
@@ -200,6 +188,20 @@ getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails | 
 | **`rsaPublicKey`** | <code>string</code> |
 
 
+#### PurchaseInfo
+
+| Prop                | Type                |
+| ------------------- | ------------------- |
+| **`orderId`**       | <code>string</code> |
+| **`purchaseToken`** | <code>string</code> |
+| **`payload`**       | <code>string</code> |
+| **`packageName`**   | <code>string</code> |
+| **`purchaseState`** | <code>number</code> |
+| **`purchaseTime`**  | <code>number</code> |
+| **`productId`**     | <code>string</code> |
+| **`dataSignature`** | <code>string</code> |
+
+
 #### PurchaseSubscribeProductParams
 
 | Prop                    | Type                |
@@ -214,20 +216,6 @@ getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails | 
 | Prop                | Type                |
 | ------------------- | ------------------- |
 | **`purchaseToken`** | <code>string</code> |
-
-
-#### PurchaseInfo
-
-| Prop                | Type                                   |
-| ------------------- | -------------------------------------- |
-| **`orderId`**       | <code>string</code>                    |
-| **`purchaseToken`** | <code>string</code>                    |
-| **`payload`**       | <code>string</code>                    |
-| **`packageName`**   | <code>string</code>                    |
-| **`purchaseState`** | <code>'PURCHASED' \| 'REFUNDED'</code> |
-| **`purchaseTime`**  | <code>number</code>                    |
-| **`productId`**     | <code>string</code>                    |
-| **`dataSignature`** | <code>string</code>                    |
 
 
 #### QueryProductParams
