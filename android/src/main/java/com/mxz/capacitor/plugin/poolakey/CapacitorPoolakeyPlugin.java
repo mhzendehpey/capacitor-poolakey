@@ -8,15 +8,20 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "CapacitorPoolakey")
 public class CapacitorPoolakeyPlugin extends Plugin {
-
-    private CapacitorPoolakey implementation = new CapacitorPoolakey();
+    private final CapacitorPoolakey implementation = new CapacitorPoolakey();
 
     @PluginMethod
-    public void echo(PluginCall call) {
+    public final void echo(PluginCall call) {
         String value = call.getString("value");
-
         JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
+        ret.put("value", this.implementation.echo(value));
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public final void connectPayment(PluginCall call) {
+        String rsaPublicKey = call.getString("rsaPublicKey");
+        this.implementation.connectPayment(this.getContext(), rsaPublicKey);
+    }
+
 }

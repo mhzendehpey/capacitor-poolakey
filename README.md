@@ -11,9 +11,52 @@ npx cap sync
 
 ## API
 
-<docgen-index></docgen-index>
+<docgen-index>
+
+* [`echo(...)`](#echo)
+* [`connectPayment(...)`](#connectpayment)
+* [Interfaces](#interfaces)
+
+</docgen-index>
 
 <docgen-api>
-<!-- run docgen to generate docs from the source -->
-<!-- More info: https://github.com/ionic-team/capacitor-docgen -->
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### echo(...)
+
+```typescript
+echo(options: { value: string; }) => Promise<{ value: string; }>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ value: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### connectPayment(...)
+
+```typescript
+connectPayment(options: connectPaymentParams) => Promise<void>
+```
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#connectpaymentparams">connectPaymentParams</a></code> |
+
+--------------------
+
+
+### Interfaces
+
+
+#### connectPaymentParams
+
+| Prop               | Type                |
+| ------------------ | ------------------- |
+| **`rsaPublicKey`** | <code>string</code> |
+
 </docgen-api>
