@@ -103,4 +103,16 @@ class CapacitorPoolakey {
       dynamicPriceToken
     )
   }
+
+  fun consumePurchase(purchaseToken: String) {
+    payment.consumeProduct(purchaseToken) {
+      consumeSucceed {
+        Log.d(LOG_TAG, "consume succeed")
+      }
+      consumeFailed {
+        Log.d(LOG_TAG, "consume failed: ${it.message}")
+      }
+    }
+  }
+
 }

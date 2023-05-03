@@ -33,22 +33,36 @@ public class CapacitorPoolakeyPlugin extends Plugin {
 
     @PluginMethod
     public final void purchaseProduct(PluginCall call) {
+        String productId = Objects.requireNonNull(call.getString("productId"));
+        String payload = call.getString("payload");
+        String dynamicPriceToken = call.getString("dynamicPriceToken");
+
         this.implementation.purchaseProduct(
                 getActivity(),
-                Objects.requireNonNull(call.getString("productId")),
-                call.getString("payload"),
-                call.getString("dynamicPriceToken")
+                productId,
+                payload,
+                dynamicPriceToken
         );
     }
 
     @PluginMethod
     public final void subscribeProduct(PluginCall call) {
+        String productId = Objects.requireNonNull(call.getString("productId"));
+        String payload = call.getString("payload");
+        String dynamicPriceToken = call.getString("dynamicPriceToken");
+
         this.implementation.subscribeProduct(
                 getActivity(),
-                Objects.requireNonNull(call.getString("productId")),
-                call.getString("payload"),
-                call.getString("dynamicPriceToken")
+                productId,
+                payload,
+                dynamicPriceToken
         );
+    }
+
+    @PluginMethod
+    public final void consumeProduct(PluginCall call) {
+        String purchaseToken = Objects.requireNonNull(call.getString("purchaseToken"));
+        this.implementation.consumePurchase(purchaseToken);
     }
 
 }

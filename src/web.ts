@@ -23,4 +23,8 @@ export class CapacitorPoolakeyWeb extends WebPlugin implements CapacitorPoolakey
     async subscribeProduct(): Promise<void> {
         console.log("Not available in web.")
     }
+
+    async consumeProduct(): Promise<void> {
+        console.log("Not available in web.")
+    }
 }

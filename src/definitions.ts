@@ -1,21 +1,27 @@
 export interface CapacitorPoolakeyPlugin {
     echo(options: { value: string }): Promise<{ value: string }>;
 
-    connectPayment(options: connectPaymentParams): Promise<void>;
+    connectPayment(options: ConnectPaymentParams): Promise<void>;
 
     disconnectPayment(): Promise<void>;
 
-    purchaseProduct(options: purchaseSubscribeProductParams): Promise<void>;
+    purchaseProduct(options: PurchaseSubscribeProductParams): Promise<void>;
 
-    subscribeProduct(options: purchaseSubscribeProductParams): Promise<void>;
+    subscribeProduct(options: PurchaseSubscribeProductParams): Promise<void>;
+
+    consumeProduct(options: ConsumeProductParams): Promise<void>;
 }
 
-export interface connectPaymentParams {
+export interface ConnectPaymentParams {
     rsaPublicKey: string,
 }
 
-export interface purchaseSubscribeProductParams {
+export interface PurchaseSubscribeProductParams {
     productId: string,
     payload?: string,
     dynamicPriceToken?: string,
+}
+
+export interface ConsumeProductParams {
+    purchaseToken: string,
 }
