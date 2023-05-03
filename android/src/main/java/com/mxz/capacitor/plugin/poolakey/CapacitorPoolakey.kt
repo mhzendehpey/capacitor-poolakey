@@ -10,6 +10,7 @@ import ir.cafebazaar.poolakey.ConnectionState
 import ir.cafebazaar.poolakey.Payment
 import ir.cafebazaar.poolakey.config.PaymentConfiguration
 import ir.cafebazaar.poolakey.config.SecurityCheck
+import org.json.JSONArray
 
 const val LOG_TAG = "CAP_POOLAKEY"
 
@@ -146,7 +147,8 @@ class CapacitorPoolakey {
             payment.getPurchasedProducts {
                 queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
                 querySucceed {
-                    val jsObject = JSObject(it.toJsonString())
+                    val jsObject = JSObject()
+                    jsObject.put("list", JSONArray(it.toJsonString()))
                     call.resolve(jsObject)
                 }
             }
@@ -158,7 +160,8 @@ class CapacitorPoolakey {
             payment.getSubscribedProducts {
                 queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
                 querySucceed {
-                    val jsObject = JSObject(it.toJsonString())
+                    val jsObject = JSObject()
+                    jsObject.put("list", JSONArray(it.toJsonString()))
                     call.resolve(jsObject)
                 }
             }

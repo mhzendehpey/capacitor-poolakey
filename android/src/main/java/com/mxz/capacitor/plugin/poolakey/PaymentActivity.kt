@@ -34,7 +34,6 @@ class PaymentActivity : ComponentActivity() {
             }
             purchaseFlowBegan {
                 Log.d(LOG_TAG, "Purchase flow began")
-                finish()
             }
             failedToBeginFlow { throwable ->
                 Log.d(LOG_TAG, "Purchase flow failed to begin: ${throwable.message}")

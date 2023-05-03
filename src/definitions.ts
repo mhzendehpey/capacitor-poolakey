@@ -3,23 +3,23 @@ export interface CapacitorPoolakeyPlugin {
 
     disconnectPayment(): Promise<void>;
 
-    purchaseProduct(options: PurchaseSubscribeProductParams): Promise<PurchaseInfo | void>;
+    purchaseProduct(options: PurchaseSubscribeProductParams): Promise<PurchaseInfo>;
 
-    subscribeProduct(options: PurchaseSubscribeProductParams): Promise<PurchaseInfo | void>;
+    subscribeProduct(options: PurchaseSubscribeProductParams): Promise<PurchaseInfo>;
 
     consumeProduct(options: ConsumeProductParams): Promise<void>;
 
-    getPurchasedProducts(): Promise<PurchaseInfo[] | void>;
+    getPurchasedProducts(): Promise<PurchasedProductsResult>;
 
-    getSubscribedProducts(): Promise<PurchaseInfo[] | void>;
+    getSubscribedProducts(): Promise<PurchasedProductsResult>;
 
-    queryPurchaseProduct(options: QueryProductParams): Promise<PurchaseInfo | void>;
+    queryPurchaseProduct(options: QueryProductParams): Promise<PurchaseInfo>;
 
-    querySubscribeProduct(options: QueryProductParams): Promise<PurchaseInfo | void>;
+    querySubscribeProduct(options: QueryProductParams): Promise<PurchaseInfo>;
 
-    getInAppSkuDetails(options: GetSkuDetailsParams): Promise<SkuDetails | void>;
+    getInAppSkuDetails(options: GetSkuDetailsParams): Promise<SkuDetails>;
 
-    getSubscriptionSkuDetails(options: GetSkuDetailsParams): Promise<SkuDetails | void>;
+    getSubscriptionSkuDetails(options: GetSkuDetailsParams): Promise<SkuDetails>;
 }
 
 export interface ConnectPaymentParams {
@@ -47,12 +47,16 @@ export interface GetSkuDetailsParams {
 export interface PurchaseInfo {
     orderId: string,
     purchaseToken: string,
-    payload: string,
+    developerPayload: string,
     packageName: string,
     purchaseState: number
     purchaseTime: number,
     productId: string,
     dataSignature: string,
+}
+
+export interface PurchasedProductsResult {
+    list: PurchaseInfo[],
 }
 
 export interface SkuDetails {

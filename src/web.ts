@@ -14,11 +14,11 @@ export class CapacitorPoolakeyWeb extends WebPlugin implements CapacitorPoolakey
         throw new Error(this.message)
     }
 
-    async purchaseProduct(): Promise<void> {
+    async purchaseProduct(): Promise<any> {
         throw new Error(this.message)
     }
 
-    async subscribeProduct(): Promise<void> {
+    async subscribeProduct(): Promise<any> {
         throw new Error(this.message)
     }
 
@@ -26,27 +26,27 @@ export class CapacitorPoolakeyWeb extends WebPlugin implements CapacitorPoolakey
         throw new Error(this.message)
     }
 
-    async getPurchasedProducts(): Promise<void> {
+    async getPurchasedProducts(): Promise<any> {
         throw new Error(this.message)
     }
 
-    async getSubscribedProducts(): Promise<void> {
+    async getSubscribedProducts(): Promise<any> {
         throw new Error(this.message)
     }
 
-    async queryPurchaseProduct(): Promise<void> {
+    async queryPurchaseProduct(): Promise<any> {
         throw new Error(this.message)
     }
 
-    async querySubscribeProduct(): Promise<void> {
+    async querySubscribeProduct(): Promise<any> {
         throw new Error(this.message)
     }
 
-    async getInAppSkuDetails(): Promise<void> {
+    async getInAppSkuDetails(): Promise<any> {
         throw new Error(this.message)
     }
 
-    async getSubscriptionSkuDetails(): Promise<void> {
+    async getSubscriptionSkuDetails(): Promise<any> {
         throw new Error(this.message)
     }
 
