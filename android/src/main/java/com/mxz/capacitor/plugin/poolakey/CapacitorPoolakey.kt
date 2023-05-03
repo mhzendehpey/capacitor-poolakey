@@ -26,20 +26,22 @@ class CapacitorPoolakey {
         }
 
         val paymentConfig = PaymentConfiguration(localSecurityCheck = securityCheck)
-        val payment = Payment(context = context, config = paymentConfig)
+        payment = Payment(context = context, config = paymentConfig)
 
-        paymentConnection = payment.connect {
-            connectionSucceed {
-                Log.d(LOG_TAG, "Connection Succeed")
-                call.resolve()
-            }
-            connectionFailed { throwable ->
-                Log.d(LOG_TAG, "Connection Failed: ${throwable.message}")
-                call.reject("Connection Failed", Exception(throwable))
-            }
-            disconnected {
-                Log.d(LOG_TAG, "Connection Disconnected")
-                call.reject("Connection Disconnected", Exception("Connection Disconnected"))
+        runIfPaymentInitialized(call) {
+            paymentConnection = payment.connect {
+                connectionSucceed {
+                    Log.d(LOG_TAG, "Connection Succeed")
+                    call.resolve()
+                }
+                connectionFailed { throwable ->
+                    Log.d(LOG_TAG, "Connection Failed: ${throwable.message}")
+                    call.reject("Connection Failed", Exception(throwable))
+                }
+                disconnected {
+                    Log.d(LOG_TAG, "Connection Disconnected")
+                    call.reject("Connection Disconnected", Exception("Connection Disconnected"))
+                }
             }
         }
     }
@@ -90,14 +92,16 @@ class CapacitorPoolakey {
         val payload = call.getString("payload")
         val dynamicPriceToken = call.getString("dynamicPriceToken")
 
-        startActivity(
-            call,
-            activity,
-            PaymentActivity.Command.Purchase,
-            productId,
-            payload,
-            dynamicPriceToken
-        )
+        runIfPaymentInitialized(call) {
+            startActivity(
+                call,
+                activity,
+                PaymentActivity.Command.Purchase,
+                productId,
+                payload,
+                dynamicPriceToken
+            )
+        }
     }
 
     fun subscribeProduct(
@@ -108,65 +112,75 @@ class CapacitorPoolakey {
         val payload = call.getString("payload")
         val dynamicPriceToken = call.getString("dynamicPriceToken")
 
-        startActivity(
-            call,
-            activity,
-            PaymentActivity.Command.Subscribe,
-            productId,
-            payload,
-            dynamicPriceToken
-        )
+        runIfPaymentInitialized(call) {
+            startActivity(
+                call,
+                activity,
+                PaymentActivity.Command.Subscribe,
+                productId,
+                payload,
+                dynamicPriceToken
+            )
+        }
     }
 
     fun consumePurchase(call: PluginCall) {
         val purchaseToken = call.getString("purchaseToken")!!
 
-        payment.consumeProduct(purchaseToken) {
-            consumeSucceed {
-                Log.d(LOG_TAG, "consume succeed")
-                call.resolve()
-            }
-            consumeFailed {
-                Log.d(LOG_TAG, "consume failed: ${it.message}")
-                call.reject("consume failed", Exception(it))
+        runIfPaymentInitialized(call) {
+            payment.consumeProduct(purchaseToken) {
+                consumeSucceed {
+                    Log.d(LOG_TAG, "consume succeed")
+                    call.resolve()
+                }
+                consumeFailed {
+                    Log.d(LOG_TAG, "consume failed: ${it.message}")
+                    call.reject("consume failed", Exception(it))
+                }
             }
         }
     }
 
     fun getPurchasedProducts(call: PluginCall) {
-        payment.getPurchasedProducts {
-            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-            querySucceed {
-                val jsObject = JSObject(it.toJsonString())
-                call.resolve(jsObject)
+        runIfPaymentInitialized(call) {
+            payment.getPurchasedProducts {
+                queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+                querySucceed {
+                    val jsObject = JSObject(it.toJsonString())
+                    call.resolve(jsObject)
+                }
             }
         }
     }
 
     fun getSubscribedProducts(call: PluginCall) {
-        payment.getSubscribedProducts {
-            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-            querySucceed {
-                val jsObject = JSObject(it.toJsonString())
-                call.resolve(jsObject)
+        runIfPaymentInitialized(call) {
+            payment.getSubscribedProducts {
+                queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+                querySucceed {
+                    val jsObject = JSObject(it.toJsonString())
+                    call.resolve(jsObject)
+                }
             }
         }
     }
 
     fun queryPurchaseProduct(call: PluginCall) {
         val productId = call.getString("productId")
-        payment.getPurchasedProducts {
-            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-            querySucceed { purchaseList ->
-                val product = purchaseList.firstOrNull {
-                    it.productId == productId
-                }
+        runIfPaymentInitialized(call) {
+            payment.getPurchasedProducts {
+                queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+                querySucceed { purchaseList ->
+                    val product = purchaseList.firstOrNull {
+                        it.productId == productId
+                    }
 
-                if (product == null) {
-                    call.reject("item not found", Exception("NotFoundException"))
-                } else {
-                    val jsObject = JSObject(product.originalJson)
-                    call.resolve(jsObject)
+                    if (product == null) {
+                        call.reject("item not found", Exception("NotFoundException"))
+                    } else {
+                        val jsObject = JSObject(product.originalJson)
+                        call.resolve(jsObject)
+                    }
                 }
             }
         }
@@ -174,18 +188,20 @@ class CapacitorPoolakey {
 
     fun querySubscribeProduct(call: PluginCall) {
         val productId = call.getString("productId")
-        payment.getSubscribedProducts {
-            queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
-            querySucceed { purchaseList ->
-                val product = purchaseList.firstOrNull {
-                    it.productId == productId
-                }
+        runIfPaymentInitialized(call) {
+            payment.getSubscribedProducts {
+                queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+                querySucceed { purchaseList ->
+                    val product = purchaseList.firstOrNull {
+                        it.productId == productId
+                    }
 
-                if (product == null) {
-                    call.reject("item not found", Exception("NotFoundException"))
-                } else {
-                    val jsObject = JSObject(product.originalJson)
-                    call.resolve(jsObject)
+                    if (product == null) {
+                        call.reject("item not found", Exception("NotFoundException"))
+                    } else {
+                        val jsObject = JSObject(product.originalJson)
+                        call.resolve(jsObject)
+                    }
                 }
             }
         }
@@ -195,16 +211,18 @@ class CapacitorPoolakey {
         val productIdsJson = call.getString("productIdsJson")!!
         val productIds = parseProductIds(productIdsJson)
 
-        payment.getInAppSkuDetails(productIds) {
-            getSkuDetailsFailed {
-                call.reject(
-                    "get Sku details failed: ${it.message}",
-                    Exception(it)
-                )
-            }
-            getSkuDetailsSucceed {
-                val jsObject = JSObject(it.toJsonString())
-                call.resolve(jsObject)
+        runIfPaymentInitialized(call) {
+            payment.getInAppSkuDetails(productIds) {
+                getSkuDetailsFailed {
+                    call.reject(
+                        "get Sku details failed: ${it.message}",
+                        Exception(it)
+                    )
+                }
+                getSkuDetailsSucceed {
+                    val jsObject = JSObject(it.toJsonString())
+                    call.resolve(jsObject)
+                }
             }
         }
     }
@@ -213,18 +231,32 @@ class CapacitorPoolakey {
         val productIdsJson = call.getString("productIdsJson")!!
         val productIds = parseProductIds(productIdsJson)
 
-        payment.getSubscriptionSkuDetails(productIds) {
-            getSkuDetailsFailed {
-                call.reject(
-                    "get Sku details failed: ${it.message}",
-                    Exception(it)
-                )
-            }
-            getSkuDetailsSucceed {
-                val jsObject = JSObject(it.toJsonString())
-                call.resolve(jsObject)
+        runIfPaymentInitialized(call) {
+            payment.getSubscriptionSkuDetails(productIds) {
+                getSkuDetailsFailed {
+                    call.reject(
+                        "get Sku details failed: ${it.message}",
+                        Exception(it)
+                    )
+                }
+                getSkuDetailsSucceed {
+                    val jsObject = JSObject(it.toJsonString())
+                    call.resolve(jsObject)
+                }
             }
         }
+    }
+
+    private fun runIfPaymentInitialized(call: PluginCall, runner: () -> Unit) {
+        if (::payment.isInitialized.not()) {
+            call.reject(
+                "Payment is not initialized",
+                IllegalStateException("Payment is not initialized")
+            )
+            return
+        }
+
+        runner.invoke()
     }
 
 }
