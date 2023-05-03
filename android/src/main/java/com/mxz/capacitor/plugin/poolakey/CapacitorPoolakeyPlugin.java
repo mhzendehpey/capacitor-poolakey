@@ -24,4 +24,9 @@ public class CapacitorPoolakeyPlugin extends Plugin {
         this.implementation.connectPayment(this.getContext(), rsaPublicKey);
     }
 
+    @PluginMethod
+    public final void disconnectPayment(PluginCall call) {
+        this.implementation.disconnectPayment();
+    }
+
 }

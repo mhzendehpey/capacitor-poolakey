@@ -44,4 +44,8 @@ class CapacitorPoolakey {
       }
     }
   }
+
+  fun disconnectPayment() {
+    paymentConnection?.disconnect()
+  }
 }

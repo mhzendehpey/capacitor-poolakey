@@ -11,4 +11,8 @@ export class CapacitorPoolakeyWeb extends WebPlugin implements CapacitorPoolakey
   async connectPayment(): Promise<void> {
     console.log("Not available in web.")
   }
+
+  async disconnectPayment(): Promise<void> {
+    console.log("Not available in web.")
+  }
 }
