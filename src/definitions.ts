@@ -10,6 +10,18 @@ export interface CapacitorPoolakeyPlugin {
     subscribeProduct(options: PurchaseSubscribeProductParams): Promise<void>;
 
     consumeProduct(options: ConsumeProductParams): Promise<void>;
+
+    getPurchasedProducts(): Promise<PurchaseInfo[] | void>;
+
+    getSubscribedProducts(): Promise<PurchaseInfo[] | void>;
+
+    queryPurchaseProduct(options: QueryProductParams): Promise<PurchaseInfo | void>;
+
+    querySubscribeProduct(options: QueryProductParams): Promise<PurchaseInfo | void>;
+
+    getInAppSkuDetails(options: GetSkuDetailsParams): Promise<SkuDetails | void>;
+
+    getSubscriptionSkuDetails(options: GetSkuDetailsParams): Promise<SkuDetails | void>;
 }
 
 export interface ConnectPaymentParams {
@@ -24,4 +36,31 @@ export interface PurchaseSubscribeProductParams {
 
 export interface ConsumeProductParams {
     purchaseToken: string,
+}
+
+export interface QueryProductParams {
+    productId: string,
+}
+
+export interface GetSkuDetailsParams {
+    productIdsJson: string,
+}
+
+export interface PurchaseInfo {
+    orderId: string,
+    purchaseToken: string,
+    payload: string,
+    packageName: string,
+    purchaseState: "PURCHASED" | "REFUNDED",
+    purchaseTime: number,
+    productId: string,
+    dataSignature: string
+}
+
+export interface SkuDetails {
+    sku: string,
+    title: string,
+    type: string,
+    price: string,
+    description: string,
 }

@@ -65,4 +65,34 @@ public class CapacitorPoolakeyPlugin extends Plugin {
         this.implementation.consumePurchase(purchaseToken);
     }
 
+    @PluginMethod
+    public final void getPurchasedProducts(PluginCall call) {
+        this.implementation.getPurchasedProducts(call);
+    }
+
+    @PluginMethod
+    public final void getSubscribedProducts(PluginCall call) {
+        this.implementation.getSubscribedProducts(call);
+    }
+
+    @PluginMethod
+    public final void queryPurchaseProduct(PluginCall call) {
+        this.implementation.queryPurchaseProduct(call);
+    }
+
+    @PluginMethod
+    public final void querySubscribeProduct(PluginCall call) {
+        this.implementation.querySubscribeProduct(call);
+    }
+
+    @PluginMethod
+    public final void getInAppSkuDetails(PluginCall call) {
+        this.implementation.getInAppSkuDetails(call);
+    }
+
+    @PluginMethod
+    public final void getSubscriptionSkuDetails(PluginCall call) {
+        this.implementation.getSubscriptionSkuDetails(call);
+    }
+
 }

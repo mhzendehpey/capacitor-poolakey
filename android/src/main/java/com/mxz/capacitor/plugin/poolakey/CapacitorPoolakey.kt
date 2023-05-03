@@ -3,7 +3,8 @@ package com.mxz.capacitor.plugin.poolakey
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-
+import com.getcapacitor.JSObject
+import com.getcapacitor.PluginCall
 import ir.cafebazaar.poolakey.Connection
 import ir.cafebazaar.poolakey.ConnectionState
 import ir.cafebazaar.poolakey.Payment
@@ -111,6 +112,90 @@ class CapacitorPoolakey {
       }
       consumeFailed {
         Log.d(LOG_TAG, "consume failed: ${it.message}")
+      }
+    }
+  }
+
+  fun getPurchasedProducts(call: PluginCall) {
+    payment.getPurchasedProducts {
+      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+      querySucceed {
+        val jsObject = JSObject(it.toJsonString())
+        call.resolve(jsObject)
+      }
+    }
+  }
+
+  fun getSubscribedProducts(call: PluginCall) {
+    payment.getSubscribedProducts {
+      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+      querySucceed {
+        val jsObject = JSObject(it.toJsonString())
+        call.resolve(jsObject)
+      }
+    }
+  }
+
+  fun queryPurchaseProduct(call: PluginCall) {
+    val productId = call.getString("productId")
+    payment.getPurchasedProducts {
+      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+      querySucceed { purchaseList ->
+        val product = purchaseList.firstOrNull {
+          it.productId == productId
+        }
+
+        if (product == null) {
+          call.reject("item not found", Exception("NotFoundException"))
+        } else {
+          val jsObject = JSObject(product.originalJson)
+          call.resolve(jsObject)
+        }
+      }
+    }
+  }
+
+  fun querySubscribeProduct(call: PluginCall) {
+    val productId = call.getString("productId")
+    payment.getSubscribedProducts {
+      queryFailed { call.reject("query failed: ${it.message}", Exception(it)) }
+      querySucceed { purchaseList ->
+        val product = purchaseList.firstOrNull {
+          it.productId == productId
+        }
+
+        if (product == null) {
+          call.reject("item not found", Exception("NotFoundException"))
+        } else {
+          val jsObject = JSObject(product.originalJson)
+          call.resolve(jsObject)
+        }
+      }
+    }
+  }
+
+  fun getInAppSkuDetails(call: PluginCall) {
+    val productIdsJson = call.getString("productIdsJson")!!
+    val productIds = parseProductIds(productIdsJson)
+
+    payment.getInAppSkuDetails(productIds) {
+      getSkuDetailsFailed { call.reject("get Sku details failed: ${it.message}", Exception(it)) }
+      getSkuDetailsSucceed {
+        val jsObject = JSObject(it.toJsonString())
+        call.resolve(jsObject)
+      }
+    }
+  }
+
+  fun getSubscriptionSkuDetails(call: PluginCall) {
+    val productIdsJson = call.getString("productIdsJson")!!
+    val productIds = parseProductIds(productIdsJson)
+
+    payment.getSubscriptionSkuDetails(productIds) {
+      getSkuDetailsFailed { call.reject("get Sku details failed: ${it.message}", Exception(it)) }
+      getSkuDetailsSucceed {
+        val jsObject = JSObject(it.toJsonString())
+        call.resolve(jsObject)
       }
     }
   }

@@ -15,6 +15,16 @@ npx cap sync
 
 * [`echo(...)`](#echo)
 * [`connectPayment(...)`](#connectpayment)
+* [`disconnectPayment()`](#disconnectpayment)
+* [`purchaseProduct(...)`](#purchaseproduct)
+* [`subscribeProduct(...)`](#subscribeproduct)
+* [`consumeProduct(...)`](#consumeproduct)
+* [`getPurchasedProducts()`](#getpurchasedproducts)
+* [`getSubscribedProducts()`](#getsubscribedproducts)
+* [`queryPurchaseProduct(...)`](#querypurchaseproduct)
+* [`querySubscribeProduct(...)`](#querysubscribeproduct)
+* [`getInAppSkuDetails(...)`](#getinappskudetails)
+* [`getSubscriptionSkuDetails(...)`](#getsubscriptionskudetails)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -40,12 +50,142 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 ### connectPayment(...)
 
 ```typescript
-connectPayment(options: connectPaymentParams) => Promise<void>
+connectPayment(options: ConnectPaymentParams) => Promise<void>
 ```
 
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#connectpaymentparams">connectPaymentParams</a></code> |
+| **`options`** | <code><a href="#connectpaymentparams">ConnectPaymentParams</a></code> |
+
+--------------------
+
+
+### disconnectPayment()
+
+```typescript
+disconnectPayment() => Promise<void>
+```
+
+--------------------
+
+
+### purchaseProduct(...)
+
+```typescript
+purchaseProduct(options: PurchaseSubscribeProductParams) => Promise<void>
+```
+
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#purchasesubscribeproductparams">PurchaseSubscribeProductParams</a></code> |
+
+--------------------
+
+
+### subscribeProduct(...)
+
+```typescript
+subscribeProduct(options: PurchaseSubscribeProductParams) => Promise<void>
+```
+
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#purchasesubscribeproductparams">PurchaseSubscribeProductParams</a></code> |
+
+--------------------
+
+
+### consumeProduct(...)
+
+```typescript
+consumeProduct(options: ConsumeProductParams) => Promise<void>
+```
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#consumeproductparams">ConsumeProductParams</a></code> |
+
+--------------------
+
+
+### getPurchasedProducts()
+
+```typescript
+getPurchasedProducts() => Promise<PurchaseInfo[] | void>
+```
+
+**Returns:** <code>Promise&lt;void | PurchaseInfo[]&gt;</code>
+
+--------------------
+
+
+### getSubscribedProducts()
+
+```typescript
+getSubscribedProducts() => Promise<PurchaseInfo[] | void>
+```
+
+**Returns:** <code>Promise&lt;void | PurchaseInfo[]&gt;</code>
+
+--------------------
+
+
+### queryPurchaseProduct(...)
+
+```typescript
+queryPurchaseProduct(options: QueryProductParams) => Promise<PurchaseInfo | void>
+```
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#queryproductparams">QueryProductParams</a></code> |
+
+**Returns:** <code>Promise&lt;void | <a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
+
+--------------------
+
+
+### querySubscribeProduct(...)
+
+```typescript
+querySubscribeProduct(options: QueryProductParams) => Promise<PurchaseInfo | void>
+```
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#queryproductparams">QueryProductParams</a></code> |
+
+**Returns:** <code>Promise&lt;void | <a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
+
+--------------------
+
+
+### getInAppSkuDetails(...)
+
+```typescript
+getInAppSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails | void>
+```
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getskudetailsparams">GetSkuDetailsParams</a></code> |
+
+**Returns:** <code>Promise&lt;void | <a href="#skudetails">SkuDetails</a>&gt;</code>
+
+--------------------
+
+
+### getSubscriptionSkuDetails(...)
+
+```typescript
+getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails | void>
+```
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getskudetailsparams">GetSkuDetailsParams</a></code> |
+
+**Returns:** <code>Promise&lt;void | <a href="#skudetails">SkuDetails</a>&gt;</code>
 
 --------------------
 
@@ -53,10 +193,65 @@ connectPayment(options: connectPaymentParams) => Promise<void>
 ### Interfaces
 
 
-#### connectPaymentParams
+#### ConnectPaymentParams
 
 | Prop               | Type                |
 | ------------------ | ------------------- |
 | **`rsaPublicKey`** | <code>string</code> |
+
+
+#### PurchaseSubscribeProductParams
+
+| Prop                    | Type                |
+| ----------------------- | ------------------- |
+| **`productId`**         | <code>string</code> |
+| **`payload`**           | <code>string</code> |
+| **`dynamicPriceToken`** | <code>string</code> |
+
+
+#### ConsumeProductParams
+
+| Prop                | Type                |
+| ------------------- | ------------------- |
+| **`purchaseToken`** | <code>string</code> |
+
+
+#### PurchaseInfo
+
+| Prop                | Type                                   |
+| ------------------- | -------------------------------------- |
+| **`orderId`**       | <code>string</code>                    |
+| **`purchaseToken`** | <code>string</code>                    |
+| **`payload`**       | <code>string</code>                    |
+| **`packageName`**   | <code>string</code>                    |
+| **`purchaseState`** | <code>'PURCHASED' \| 'REFUNDED'</code> |
+| **`purchaseTime`**  | <code>number</code>                    |
+| **`productId`**     | <code>string</code>                    |
+| **`dataSignature`** | <code>string</code>                    |
+
+
+#### QueryProductParams
+
+| Prop            | Type                |
+| --------------- | ------------------- |
+| **`productId`** | <code>string</code> |
+
+
+#### SkuDetails
+
+| Prop              | Type                |
+| ----------------- | ------------------- |
+| **`sku`**         | <code>string</code> |
+| **`title`**       | <code>string</code> |
+| **`type`**        | <code>string</code> |
+| **`price`**       | <code>string</code> |
+| **`description`** | <code>string</code> |
+
+
+#### GetSkuDetailsParams
+
+| Prop                 | Type                |
+| -------------------- | ------------------- |
+| **`productIdsJson`** | <code>string</code> |
 
 </docgen-api>
