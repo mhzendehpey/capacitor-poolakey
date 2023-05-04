@@ -39,12 +39,12 @@ npx cap sync
 ### connectPayment(...)
 
 ```typescript
-connectPayment(options: ConnectPaymentParams) => Promise<void>
+connectPayment(rsaPublicKey: string) => Promise<void>
 ```
 
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#connectpaymentparams">ConnectPaymentParams</a></code> |
+| Param              | Type                |
+| ------------------ | ------------------- |
+| **`rsaPublicKey`** | <code>string</code> |
 
 --------------------
 
@@ -61,12 +61,14 @@ disconnectPayment() => Promise<void>
 ### purchaseProduct(...)
 
 ```typescript
-purchaseProduct(options: PurchaseSubscribeProductParams) => Promise<PurchaseInfo>
+purchaseProduct(productId: string, payload?: string | undefined, dynamicPriceToken?: string | undefined) => Promise<PurchaseInfo>
 ```
 
-| Param         | Type                                                                                      |
-| ------------- | ----------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#purchasesubscribeproductparams">PurchaseSubscribeProductParams</a></code> |
+| Param                   | Type                |
+| ----------------------- | ------------------- |
+| **`productId`**         | <code>string</code> |
+| **`payload`**           | <code>string</code> |
+| **`dynamicPriceToken`** | <code>string</code> |
 
 **Returns:** <code>Promise&lt;<a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
 
@@ -76,12 +78,14 @@ purchaseProduct(options: PurchaseSubscribeProductParams) => Promise<PurchaseInfo
 ### subscribeProduct(...)
 
 ```typescript
-subscribeProduct(options: PurchaseSubscribeProductParams) => Promise<PurchaseInfo>
+subscribeProduct(productId: string, payload?: string | undefined, dynamicPriceToken?: string | undefined) => Promise<PurchaseInfo>
 ```
 
-| Param         | Type                                                                                      |
-| ------------- | ----------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#purchasesubscribeproductparams">PurchaseSubscribeProductParams</a></code> |
+| Param                   | Type                |
+| ----------------------- | ------------------- |
+| **`productId`**         | <code>string</code> |
+| **`payload`**           | <code>string</code> |
+| **`dynamicPriceToken`** | <code>string</code> |
 
 **Returns:** <code>Promise&lt;<a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
 
@@ -91,12 +95,12 @@ subscribeProduct(options: PurchaseSubscribeProductParams) => Promise<PurchaseInf
 ### consumeProduct(...)
 
 ```typescript
-consumeProduct(options: ConsumeProductParams) => Promise<void>
+consumeProduct(purchaseToken: string) => Promise<void>
 ```
 
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#consumeproductparams">ConsumeProductParams</a></code> |
+| Param               | Type                |
+| ------------------- | ------------------- |
+| **`purchaseToken`** | <code>string</code> |
 
 --------------------
 
@@ -104,10 +108,10 @@ consumeProduct(options: ConsumeProductParams) => Promise<void>
 ### getPurchasedProducts()
 
 ```typescript
-getPurchasedProducts() => Promise<PurchasedProductsResult>
+getPurchasedProducts() => Promise<PurchaseInfoList>
 ```
 
-**Returns:** <code>Promise&lt;<a href="#purchasedproductsresult">PurchasedProductsResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#purchaseinfolist">PurchaseInfoList</a>&gt;</code>
 
 --------------------
 
@@ -115,10 +119,10 @@ getPurchasedProducts() => Promise<PurchasedProductsResult>
 ### getSubscribedProducts()
 
 ```typescript
-getSubscribedProducts() => Promise<PurchasedProductsResult>
+getSubscribedProducts() => Promise<PurchaseInfoList>
 ```
 
-**Returns:** <code>Promise&lt;<a href="#purchasedproductsresult">PurchasedProductsResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#purchaseinfolist">PurchaseInfoList</a>&gt;</code>
 
 --------------------
 
@@ -126,12 +130,12 @@ getSubscribedProducts() => Promise<PurchasedProductsResult>
 ### queryPurchaseProduct(...)
 
 ```typescript
-queryPurchaseProduct(options: QueryProductParams) => Promise<PurchaseInfo>
+queryPurchaseProduct(productId: string) => Promise<PurchaseInfo>
 ```
 
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#queryproductparams">QueryProductParams</a></code> |
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`productId`** | <code>string</code> |
 
 **Returns:** <code>Promise&lt;<a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
 
@@ -141,12 +145,12 @@ queryPurchaseProduct(options: QueryProductParams) => Promise<PurchaseInfo>
 ### querySubscribeProduct(...)
 
 ```typescript
-querySubscribeProduct(options: QueryProductParams) => Promise<PurchaseInfo>
+querySubscribeProduct(productId: string) => Promise<PurchaseInfo>
 ```
 
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#queryproductparams">QueryProductParams</a></code> |
+| Param           | Type                |
+| --------------- | ------------------- |
+| **`productId`** | <code>string</code> |
 
 **Returns:** <code>Promise&lt;<a href="#purchaseinfo">PurchaseInfo</a>&gt;</code>
 
@@ -156,12 +160,12 @@ querySubscribeProduct(options: QueryProductParams) => Promise<PurchaseInfo>
 ### getInAppSkuDetails(...)
 
 ```typescript
-getInAppSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails>
+getInAppSkuDetails(productIdsJson: string) => Promise<SkuDetails>
 ```
 
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code><a href="#getskudetailsparams">GetSkuDetailsParams</a></code> |
+| Param                | Type                |
+| -------------------- | ------------------- |
+| **`productIdsJson`** | <code>string</code> |
 
 **Returns:** <code>Promise&lt;<a href="#skudetails">SkuDetails</a>&gt;</code>
 
@@ -171,12 +175,12 @@ getInAppSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails>
 ### getSubscriptionSkuDetails(...)
 
 ```typescript
-getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails>
+getSubscriptionSkuDetails(productIdsJson: string) => Promise<SkuDetails>
 ```
 
-| Param         | Type                                                                |
-| ------------- | ------------------------------------------------------------------- |
-| **`options`** | <code><a href="#getskudetailsparams">GetSkuDetailsParams</a></code> |
+| Param                | Type                |
+| -------------------- | ------------------- |
+| **`productIdsJson`** | <code>string</code> |
 
 **Returns:** <code>Promise&lt;<a href="#skudetails">SkuDetails</a>&gt;</code>
 
@@ -184,13 +188,6 @@ getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails>
 
 
 ### Interfaces
-
-
-#### ConnectPaymentParams
-
-| Prop               | Type                |
-| ------------------ | ------------------- |
-| **`rsaPublicKey`** | <code>string</code> |
 
 
 #### PurchaseInfo
@@ -207,34 +204,11 @@ getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails>
 | **`dataSignature`**    | <code>string</code> |
 
 
-#### PurchaseSubscribeProductParams
-
-| Prop                    | Type                |
-| ----------------------- | ------------------- |
-| **`productId`**         | <code>string</code> |
-| **`payload`**           | <code>string</code> |
-| **`dynamicPriceToken`** | <code>string</code> |
-
-
-#### ConsumeProductParams
-
-| Prop                | Type                |
-| ------------------- | ------------------- |
-| **`purchaseToken`** | <code>string</code> |
-
-
-#### PurchasedProductsResult
+#### PurchaseInfoList
 
 | Prop       | Type                        |
 | ---------- | --------------------------- |
 | **`list`** | <code>PurchaseInfo[]</code> |
-
-
-#### QueryProductParams
-
-| Prop            | Type                |
-| --------------- | ------------------- |
-| **`productId`** | <code>string</code> |
 
 
 #### SkuDetails
@@ -246,12 +220,5 @@ getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails>
 | **`type`**        | <code>string</code> |
 | **`price`**       | <code>string</code> |
 | **`description`** | <code>string</code> |
-
-
-#### GetSkuDetailsParams
-
-| Prop                 | Type                |
-| -------------------- | ------------------- |
-| **`productIdsJson`** | <code>string</code> |
 
 </docgen-api>
