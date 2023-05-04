@@ -14,6 +14,40 @@ yarn add capacitor-poolakey
 npx cap sync
 ```
 
+## Usage
+```typescript
+import {CapacitorPoolakey} from "capacitor-poolakey";
+
+class myClassComponent extends React.Component {
+    
+    getPurchasedProducts() {
+        CapacitorPoolakey.getPurchasedProducts().then((res) => {
+            console.log("poolakey: getPurchasedProducts succeed")
+            console.log(res?.list)
+        }).catch(err => {
+            console.log(`poolakey: getPurchasedProducts failed: ${err}`)
+        })
+    }
+
+    componentDidMount() {
+        CapacitorPoolakey.connectPayment(rsaPublicKey).then(() => {
+            console.log("poolakey: connected")
+            this.getPurchasedProducts()
+        }).catch(err => {
+            console.log(`poolakey: failed to connect: ${err}`)
+        })
+    }
+
+    componentWillUnmount() {
+        CapacitorPoolakey.disconnectPayment().then(() => {
+            console.log("poolakey: disconnected on unmount")
+        }).catch(err => {
+            console.log(`poolakey: failed to disconnect on unmount: ${err}`)
+        })
+    }
+}
+```
+
 ## API
 
 <docgen-index>
