@@ -1,11 +1,16 @@
 # capacitor-poolakey
 
-A bridge for cafebazaar in-app-billing SDK (Poolakey) in CapacitorJs
+A bridge for CafeBazaar (Android App Store) in-app-billing SDK (Poolakey) in CapacitorJs
 
 ## Install
 
 ```bash
 npm install capacitor-poolakey
+npx cap sync
+```
+or
+```bash
+yarn add capacitor-poolakey
 npx cap sync
 ```
 
@@ -99,10 +104,10 @@ consumeProduct(options: ConsumeProductParams) => Promise<void>
 ### getPurchasedProducts()
 
 ```typescript
-getPurchasedProducts() => Promise<PurchasesProductsResult>
+getPurchasedProducts() => Promise<PurchasedProductsResult>
 ```
 
-**Returns:** <code>Promise&lt;<a href="#purchasesproductsresult">PurchasesProductsResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#purchasedproductsresult">PurchasedProductsResult</a>&gt;</code>
 
 --------------------
 
@@ -110,10 +115,10 @@ getPurchasedProducts() => Promise<PurchasesProductsResult>
 ### getSubscribedProducts()
 
 ```typescript
-getSubscribedProducts() => Promise<PurchasesProductsResult>
+getSubscribedProducts() => Promise<PurchasedProductsResult>
 ```
 
-**Returns:** <code>Promise&lt;<a href="#purchasesproductsresult">PurchasesProductsResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#purchasedproductsresult">PurchasedProductsResult</a>&gt;</code>
 
 --------------------
 
@@ -218,7 +223,7 @@ getSubscriptionSkuDetails(options: GetSkuDetailsParams) => Promise<SkuDetails>
 | **`purchaseToken`** | <code>string</code> |
 
 
-#### PurchasesProductsResult
+#### PurchasedProductsResult
 
 | Prop       | Type                        |
 | ---------- | --------------------------- |
