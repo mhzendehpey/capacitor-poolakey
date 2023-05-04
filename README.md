@@ -16,33 +16,33 @@ npx cap sync
 
 ## Usage
 ```typescript
-import {CapacitorPoolakey} from "capacitor-poolakey";
+import {Poolakey} from "capacitor-poolakey";
 
 class myClassComponent extends React.Component {
     
     getPurchasedProducts() {
-        CapacitorPoolakey.getPurchasedProducts().then((res) => {
-            console.log("poolakey: getPurchasedProducts succeed")
+        Poolakey.getPurchasedProducts().then((res) => {
+            console.log("Poolakey: getPurchasedProducts succeed")
             console.log(res?.list)
         }).catch(err => {
-            console.log(`poolakey: getPurchasedProducts failed: ${err}`)
+            console.log(`Poolakey: getPurchasedProducts failed: ${err}`)
         })
     }
 
     componentDidMount() {
-        CapacitorPoolakey.connectPayment(rsaPublicKey).then(() => {
-            console.log("poolakey: connected")
+        Poolakey.connectPayment(rsaPublicKey).then(() => {
+            console.log("Poolakey: connected")
             this.getPurchasedProducts()
         }).catch(err => {
-            console.log(`poolakey: failed to connect: ${err}`)
+            console.log(`Poolakey: failed to connect: ${err}`)
         })
     }
 
     componentWillUnmount() {
-        CapacitorPoolakey.disconnectPayment().then(() => {
-            console.log("poolakey: disconnected on unmount")
+        Poolakey.disconnectPayment().then(() => {
+            console.log("Poolakey: disconnected on unmount")
         }).catch(err => {
-            console.log(`poolakey: failed to disconnect on unmount: ${err}`)
+            console.log(`Poolakey: failed to disconnect on unmount: ${err}`)
         })
     }
 }

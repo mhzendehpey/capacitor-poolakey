@@ -1,10 +1,12 @@
-import { registerPlugin } from '@capacitor/core';
+import {registerPlugin} from '@capacitor/core';
 
-import type { CapacitorPoolakeyPlugin } from './definitions';
+import {PoolakeyAPI} from "./api";
+import type {CapacitorPoolakeyPlugin, PoolakeyBridge} from './definitions';
 
 const CapacitorPoolakey = registerPlugin<CapacitorPoolakeyPlugin>('CapacitorPoolakey', {
-  web: () => import('./web').then(m => new m.CapacitorPoolakeyWeb()),
+    web: () => import('./web').then(m => new m.CapacitorPoolakeyWeb()),
 });
+const Poolakey: PoolakeyBridge = new PoolakeyAPI(CapacitorPoolakey)
 
 export * from './definitions';
-export { CapacitorPoolakey };
+export {Poolakey};

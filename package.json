@@ -1,6 +1,6 @@
 {
   "name": "capacitor-poolakey",
-  "version": "0.1.6",
+  "version": "0.1.10",
   "description": "A bridge for CafeBazaar (Android App Store) in-app-billing SDK (Poolakey) in CapacitorJs",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -33,7 +33,7 @@
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
-    "docgen": "docgen --api CapacitorPoolakeyPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api PoolakeyBridge --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
