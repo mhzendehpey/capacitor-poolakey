@@ -1,4 +1,4 @@
-# capacitor-poolakey
+# capacitor-poolakey [![NPM Version](https://img.shields.io/npm/v/capacitor-poolakey)](https://www.npmjs.com/package/capacitor-poolakey)
 
 A bridge for CafeBazaar (Android App Store) in-app-billing SDK (Poolakey) in CapacitorJs
 
