@@ -1,6 +1,6 @@
 {
   "name": "capacitor-poolakey",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "A bridge for CafeBazaar (Android App Store) in-app-billing SDK (Poolakey) in CapacitorJs",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
