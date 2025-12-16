@@ -7,6 +7,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "CapacitorPoolakey")
 public class CapacitorPoolakeyPlugin extends Plugin {
+
     private final CapacitorPoolakey implementation = new CapacitorPoolakey();
 
     @PluginMethod
@@ -21,18 +22,12 @@ public class CapacitorPoolakeyPlugin extends Plugin {
 
     @PluginMethod
     public final void purchaseProduct(PluginCall call) {
-        this.implementation.purchaseProduct(
-                call,
-                getActivity()
-        );
+        this.implementation.purchaseProduct(call, getActivity());
     }
 
     @PluginMethod
     public final void subscribeProduct(PluginCall call) {
-        this.implementation.subscribeProduct(
-                call,
-                getActivity()
-        );
+        this.implementation.subscribeProduct(call, getActivity());
     }
 
     @PluginMethod
@@ -69,5 +64,4 @@ public class CapacitorPoolakeyPlugin extends Plugin {
     public final void getSubscriptionSkuDetails(PluginCall call) {
         this.implementation.getSubscriptionSkuDetails(call);
     }
-
 }
